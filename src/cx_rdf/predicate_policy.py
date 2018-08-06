@@ -30,7 +30,7 @@ import itertools as itt
 import logging
 from typing import Dict, List, Optional
 
-from ndex2.cx import known_aspects
+from ndex2 import known_aspects
 from rdflib import BNode, Graph, Literal, Namespace, RDF
 
 from .abstract_policy import _handle_aspects

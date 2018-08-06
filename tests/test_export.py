@@ -7,9 +7,6 @@ import unittest
 
 from cx_rdf import cx_to_rdf_graph
 from ndex2 import NiceCXNetwork
-from ndex2.cx import CX_CONSTANTS
-from ndex2.cx.aspects.CitationElement import CitationElement
-from ndex2.cx.aspects.SupportElement import SupportElement
 from rdflib import Graph
 
 
@@ -42,11 +39,11 @@ class TestExport(unittest.TestCase):
             edge_interaction='increases',
         )
 
-        c1 = CitationElement(id=0, title='Hi')
-        cx_network.add_citation(c1)
+        c1 = cx_network.add_citation(id=0, title='Hi')
+        cx_network.add_edge_citations(e1, c1.get('@id'))
 
-        s1 = SupportElement(id=0, text='Hi')
-        cx_network.add_support(s1)
+        s1 = cx_network.add_support(id=0, text='Hi')
+        cx_network.add_edge_supports(e1, s1.get('@id'))
 
         cx_network.add_node_attribute(property_of=a, name='Color', values='Red')
         cx_network.add_node_attribute(property_of=b, name='Color', values='Red')
@@ -65,10 +62,9 @@ class TestExport(unittest.TestCase):
         cx_network.add_edge_attribute(property_of=e1, name='Color', values='Green')
         cx_network.add_edge_attribute(property_of=e2, name='Color', values='Purple')
 
-        cx_network.add_edge_citations(edge_id=e1, citation_id=c1.get_id())
+        cx_network.add_edge_citations(edge_id=e1, citation_id=c1.get('@id'))
 
-        edge_support_element_1 = {CX_CONSTANTS.PROPERTY_OF: [e1], CX_CONSTANTS.SUPPORTS: [c1.get_id()]}
-        cx_network.add_edge_supports(edge_supports_element=edge_support_element_1)
+        cx_network.add_edge_supports(e1, c1.get('@id'))
 
         cls.cx_json = json.loads(json.dumps(cx_network.to_cx()))
         print(json.dumps(cls.cx_json, indent=2))
